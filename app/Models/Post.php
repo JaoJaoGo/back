@@ -7,14 +7,47 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Post
+ *
+ * Model responsável por representar a entidade Post
+ * no sistema.
+ *
+ * Este model:
+ * - Representa conteúdos publicados por usuários
+ * - Suporta exclusão lógica (Soft Deletes)
+ * - Define atributos mass-assignable e casts
+ * - Declara relacionamentos Eloquent
+ *
+ * @property int $id
+ * @property string $title
+ * @property string|null $subtitle
+ * @property string|null $tags
+ * @property string $content
+ * @property int $user_id
+ * @property string|null $image
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ *
+ * @property-read \App\Models\User $user
+ *
+ * @package App\Models
+ */
 class Post extends Model
 {
+    /**
+     * Traits utilizados pelo model.
+     *
+     * - SoftDeletes: exclusão lógica de registros
+     * - HasFactory: suporte a factories
+     */
     use SoftDeletes, HasFactory;
     
     /**
-     * The attributes that are mass assignable.
+     * Atributos que podem ser atribuídos em massa.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'title',
@@ -26,7 +59,7 @@ class Post extends Model
     ];
 
     /**
-     * The attributes that should be cast.
+     * Define os casts automáticos dos atributos.
      *
      * @return array<string, string>
      */
@@ -38,7 +71,9 @@ class Post extends Model
     }
 
     /**
-     * Relacionamento: Um post pertence a um usuário
+     * Relacionamento: um post pertence a um usuário.
+     *
+     * @return BelongsTo Relacionamento com a entidade User
      */
     public function user(): BelongsTo
     {
