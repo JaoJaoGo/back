@@ -22,6 +22,14 @@ use App\Http\Services\UserService;
 class UserController extends Controller
 {
     /**
+     * Injeta o {@see UserService} para que o controller
+     * possa delegar a lógica de negócio para ele.
+     */
+    public function __construct(
+        protected UserService $userService
+    ) {}
+
+    /**
      * Cria um novo usuário.
      * 
      * Os dados da requisição são validados através do
@@ -31,13 +39,12 @@ class UserController extends Controller
      * mantendo o controller desacoplado da regra de negócio.
      * 
      * @param StoreUserRequest $request Request contendo os dados validados do usuário
-     * @param UserService $service Serviço responsável pela criação do usuário
      * 
      * @return UserResponse Resposta HTTP padronizada indicando sucesso na criação
      */
-    public function store(StoreUserRequest $request, UserService $service)
+    public function store(StoreUserRequest $request)
     {
-        $user = $service->create($request->validated());
+        $user = $this->userService->create($request->validated());
 
         return UserResponse::created($user);
     }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Post
@@ -24,13 +24,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $subtitle
  * @property string|null $tags
  * @property string $content
- * @property int $user_id
+ * @property string $author
  * @property string|null $image
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\Tag[] $tags
  *
  * @package App\Models
  */
@@ -43,6 +43,13 @@ class Post extends Model
      * - HasFactory: suporte a factories
      */
     use SoftDeletes, HasFactory;
+
+    /**
+     * Nome da tabela no banco de dados.
+     *
+     * @var string
+     */
+    protected $table = 'posts';
     
     /**
      * Atributos que podem ser atribuídos em massa.
@@ -52,9 +59,8 @@ class Post extends Model
     protected $fillable = [
         'title',
         'subtitle',
-        'tags',
         'content',
-        'user_id',
+        'author',
         'image',
     ];
 
@@ -71,12 +77,12 @@ class Post extends Model
     }
 
     /**
-     * Relacionamento: um post pertence a um usuário.
+     * Relacionamento: um post pertence a muitas tags.
      *
-     * @return BelongsTo Relacionamento com a entidade User
+     * @return BelongsToMany Relacionamento com a entidade Tag
      */
-    public function user(): BelongsTo
+    public function tags(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Tag::class);
     }
 }

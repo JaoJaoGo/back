@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('subtitle')->nullable();
-            $table->string('tags');
             $table->text('content');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->string('image')->nullable();
+            $table->string('author');
             $table->timestamps();
             $table->softDeletes();
         });

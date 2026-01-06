@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
+
+// Controllers
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Post\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,4 +57,18 @@ Route::middleware('auth:sanctum')->group(function () {
      * encerrando a sessão da API.
      */
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    /**
+     * Rotas de Post
+     * 
+     * Rotas protegidas que permitem o gerenciamento de posts
+     * pelo usuário autenticado.
+     */
+    Route::prefix('posts')->group(function () {
+        Route::get('/', [PostController::class, 'index']);
+        Route::get('/{id}', [PostController::class, 'show'])->whereNumber('id');
+        Route::post('/', [PostController::class, 'store']);
+        Route::put('/{id}', [PostController::class, 'update'])->whereNumber('id');
+        Route::delete('/{id}', [PostController::class, 'destroy'])->whereNumber('id');
+    });
 });

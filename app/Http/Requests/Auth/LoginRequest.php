@@ -50,4 +50,21 @@ class LoginRequest extends FormRequest
             'password' => ['required', 'string', 'max:255'],
         ];
     }
+
+    /**
+     * Retorna as mensagens de validação personalizadas.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'O email deve ser obrigatório',
+            'email.email' => 'O email deve ser válido',
+            'email.max' => 'O email deve ter no máximo 255 caracteres',
+            'password.required' => 'A senha deve ser obrigatória',
+            'password.string' => 'A senha deve ser uma string',
+            'password.max' => 'A senha deve ter no máximo 255 caracteres',
+        ];
+    }
 }

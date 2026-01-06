@@ -58,4 +58,26 @@ class StoreUserRequest extends FormRequest
             'password' => ['required', Password::defaults()],
         ];
     }
+
+    /**
+     * Retorna as mensagens de validação personalizadas.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'O nome é obrigatório',
+            'age.required' => 'A idade é obrigatória',
+            'age.integer' => 'A idade deve ser um número inteiro',
+            'age.min' => 'A idade deve ser pelo menos 1',
+            'birth_date.required' => 'A data de nascimento é obrigatória',
+            'phone.required' => 'O telefone é obrigatório',
+            'email.required' => 'O e-mail é obrigatório',
+            'email.email' => 'O e-mail deve ser válido',
+            'email.unique' => 'O e-mail já está em uso',
+            'password.required' => 'A senha é obrigatória',
+            'password.password' => 'A senha deve ser forte',
+        ];
+    }
 }
