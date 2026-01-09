@@ -8,6 +8,7 @@ use App\Http\Resources\Auth\UserResource;
 use App\Http\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AuthController
@@ -49,7 +50,6 @@ class AuthController extends Controller
      * 
      * A resposta normalmente contém:
      * - Dados do usuário autenticado
-     * - Token de acesso (ex: Sanctum)
      * 
      * @param LoginRequest $request Request contendo as credenciais validadas
      * 
@@ -94,7 +94,10 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json([
             'message' => 'Logout realizado com sucesso',

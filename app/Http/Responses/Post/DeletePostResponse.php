@@ -28,6 +28,6 @@ class DeletePostResponse
     {
         return response()->json([
             'message' => 'Post removido com sucesso.',
-        ], 204);
+        ], 200);
     }
 }

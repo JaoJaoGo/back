@@ -30,12 +30,18 @@ class PostRepository
     {
         return Post::query()
             ->with('tags')
-            ->where('author', $filters['author'])
+            ->when(
+                $filters['author'] ?? null,
+                fn ($q, $author) => $q->where('author', $author)
+            )
             ->when(
                 $filters['search'] ?? null,
-                fn($q, $search) =>
-                    $q->where('title', 'like', "%{$search}%")
-                        ->orWhere('subtitle', 'like', "%{$search}%")
+                fn ($q, $search) =>
+                    $q->where(function ($subQuery) use ($search) {
+                        $subQuery
+                            ->where('title', 'like', "%{$search}%")
+                            ->orWhere('subtitle', 'like', "%{$search}%");
+                    })
             )
             ->when(
                 $filters['tags'] ?? null,

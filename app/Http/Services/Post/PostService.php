@@ -59,11 +59,13 @@ class PostService
      */
     public function find(int $id): Post|ModelNotFoundException
     {
-        try {
-            return $this->repository->findById($id);
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException('Post não encontrado');
+        $post = $this->repository->findById($id);
+
+        if (!$post) {
+            throw new ModelNotFoundException('Post não encontrado.');
         }
+
+        return $post;
     }
 
     /**

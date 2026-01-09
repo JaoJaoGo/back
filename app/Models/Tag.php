@@ -51,6 +51,13 @@ class Tag extends Model
     ];
 
     /**
+     * Essa tabela não possuí timestamp
+     * 
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * Relacionamento: uma tag pertence a muitos posts
      * 
      * @return BelongsToMany Relacionamento com a entidade Post

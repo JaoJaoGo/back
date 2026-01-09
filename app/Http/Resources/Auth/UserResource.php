@@ -46,7 +46,7 @@ class UserResource extends JsonResource
             'birth_date' => $this->birth_date,
             'phone' => $this->phone,
             'email' => $this->email,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->toISOString(),
         ];
     }
 }

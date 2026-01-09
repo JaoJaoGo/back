@@ -106,9 +106,13 @@ class ListPostsRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function validated(): array
+    public function validated($key = null, $default = null)
     {
-        $data = parent::validated();
+        $data = parent::validated($key, $default);
+
+        if ($key !== null || ! is_array($data)) {
+            return $data;
+        }
 
         // Defaults
         $data['per_page'] = $data['per_page'] ?? 10;

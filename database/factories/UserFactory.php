@@ -25,20 +25,59 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'age' => fake()->numberBetween(18, 80),
+            'birth_date' => fake()->date('Y-m-d', '-18 years'),
+            'phone' => fake()->phoneNumber(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Create a user with specific age.
      */
-    public function unverified(): static
+    public function age(int $age): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'age' => $age,
+            'birth_date' => now()->subYears($age)->format('Y-m-d'),
+        ]);
+    }
+
+    /**
+     * Create a minor user (under 18).
+     */
+    public function minor(): static
+    {
+        return $this->age(fake()->numberBetween(12, 17));
+    }
+
+    /**
+     * Create an elderly user (over 65).
+     */
+    public function elderly(): static
+    {
+        return $this->age(fake()->numberBetween(66, 100));
+    }
+
+    /**
+     * Create a user with a specific email.
+     */
+    public function email(string $email): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'email' => $email,
+        ]);
+    }
+
+    /**
+     * Create a user with a specific password.
+     */
+    public function password(string $password): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'password' => Hash::make($password),
         ]);
     }
 }

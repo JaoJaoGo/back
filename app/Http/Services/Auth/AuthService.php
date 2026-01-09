@@ -6,6 +6,7 @@ use App\Http\Resources\Auth\UserResource;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AuthService
@@ -14,8 +15,8 @@ use Illuminate\Support\Facades\Hash;
  * de usuários no sistema.
  *
  * Centraliza o processo de login, validação de credenciais
- * e geração de tokens de acesso, mantendo os controllers
- * desacoplados das regras de negócio.
+ * e retorno de dados do usuário autenticado,
+ * mantendo os controllers desacoplados das regras de negócio.
  *
  * @package App\Http\Services\Auth
  */
@@ -27,7 +28,6 @@ class AuthService
      * Fluxo de autenticação:
      * - Busca o usuário pelo e-mail informado
      * - Valida a senha utilizando hash seguro
-     * - Gera um token de acesso (ex: Laravel Sanctum)
      *
      * Em caso de falha, uma {@see AuthenticationException}
      * é lançada, devendo ser tratada pela camada HTTP.
@@ -36,8 +36,6 @@ class AuthService
      *
      * @return array{
      *     user: UserResource,
-     *     token: string,
-     *     token_type: string
      * }
      * Estrutura de dados retornada após autenticação bem-sucedida
      *
@@ -45,18 +43,14 @@ class AuthService
      */
     public function login(array $credentials): array
     {
-        $user = User::where('email', $credentials['email'])->first();
-
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (!Auth::guard('web')->attempt($credentials)) {
             throw new AuthenticationException('Email ou senha inválidos');
         }
 
-        $token = $user->createToken('auth-token')->plainTextToken;
+        $user = Auth::guard('web')->user();
 
         return [
             'user' => new UserResource($user),
-            'token' => $token,
-            'token_type' => 'Bearer',
         ];
     }
 }

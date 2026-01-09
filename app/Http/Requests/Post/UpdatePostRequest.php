@@ -22,7 +22,7 @@ class UpdatePostRequest extends FormRequest
      * Determina se o usuário está autorizado
      * a realizar esta requisição.
      *
-     * O sistema de autorização será feita via middleware.
+     * O sistema de autorização será feito via middleware.
      *
      * @return bool
      */
@@ -82,9 +82,13 @@ class UpdatePostRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function validated(): array
+    public function validated($key = null, $default = null)
     {
-        $data = parent::validated();
+        $data = parent::validated($key, $default);
+
+        if ($key !== null || ! is_array($data)) {
+            return $data;
+        }
 
         if (isset($data['tags'])) {
             $data['tags'] = collect($data['tags'])

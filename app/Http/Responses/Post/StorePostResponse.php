@@ -32,7 +32,7 @@ class StorePostResponse
     public static function fromModel(Post $post): JsonResponse
     {
         return response()->json([
-            'messsage' => 'Post criado com sucesso',
+            'message' => 'Post criado com sucesso',
             'data' => PostResource::make($post),
         ], 201);
     }

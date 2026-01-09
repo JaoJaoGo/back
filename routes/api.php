@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Controllers
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Post\PostController;
 
 /*
@@ -27,9 +28,20 @@ use App\Http\Controllers\Post\PostController;
  *
  * Retorna:
  * - Dados do usuário autenticado
- * - Token de acesso (Bearer)
  */
 Route::post('login', [AuthController::class, 'login']);
+
+/**
+ * Registra um novo usuário no sistema.
+ *
+ * Endpoint público responsável por criar uma nova conta
+ * de usuário com os dados básicos necessários.
+ *
+ * Retorna:
+ * - Mensagem de sucesso
+ * - Dados do usuário criado
+ */
+Route::post('register', [UserController::class, 'store']);
 
 
 /*
@@ -41,11 +53,11 @@ Route::post('login', [AuthController::class, 'login']);
 | via Laravel Sanctum.
 |
 */
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('web', 'auth:sanctum')->group(function () {
      /**
      * Retorna os dados do usuário autenticado.
      *
-     * Utiliza o token presente no header Authorization
+     * Utiliza a sessão autenticada via cookies (Sanctum SPA)
      * para identificar o usuário logado.
      */
     Route::get('/me', [AuthController::class, 'me']);

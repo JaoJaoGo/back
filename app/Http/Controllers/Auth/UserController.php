@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Responses\UserResponse;
-use App\Http\Services\UserService;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\StoreUserRequest;
+use App\Http\Responses\Auth\UserResponse;
+use App\Http\Services\Auth\UserService;
 
 /**
  * Class UserController
