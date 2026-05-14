@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Post\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,29 @@ Route::post('login', [AuthController::class, 'login']);
  */
 Route::post('register', [UserController::class, 'store']);
 
+/**
+ * Rotas de Post
+ * 
+ * Rotas públicas que permitem o acesso aos posts
+ * sem necessidade de autenticação.
+ */
+Route::prefix('posts')->group(function () {
+    Route::get('/', [PostController::class, 'index']);
+    Route::get('/{id}', [PostController::class, 'show'])
+        ->whereNumber('id');
+});
+
+/**
+ * Rotas de Tag
+ * 
+ * Rotas públicas que permitem o acesso às tags
+ * sem necessidade de autenticação.
+ */
+Route::prefix('tags')->group(function () {
+    Route::get('/', [TagController::class, 'index']);
+    Route::get('/{id}', [TagController::class, 'show'])
+        ->whereNumber('id');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -77,10 +101,20 @@ Route::middleware('web', 'auth:sanctum')->group(function () {
      * pelo usuário autenticado.
      */
     Route::prefix('posts')->group(function () {
-        Route::get('/', [PostController::class, 'index']);
-        Route::get('/{id}', [PostController::class, 'show'])->whereNumber('id');
         Route::post('/', [PostController::class, 'store']);
         Route::put('/{id}', [PostController::class, 'update'])->whereNumber('id');
         Route::delete('/{id}', [PostController::class, 'destroy'])->whereNumber('id');
+    });
+    
+    /**
+     * Rotas de Tag
+     * 
+     * Rotas protegidas que permitem o gerenciamento de tags
+     * pelo usuário autenticado.
+     */
+    Route::prefix('tags')->group(function () {
+        Route::post('/', [TagController::class, 'store']);
+        Route::put('/{id}', [TagController::class, 'update'])->whereNumber('id');
+        Route::delete('/{id}', [TagController::class, 'destroy'])->whereNumber('id');
     });
 });
