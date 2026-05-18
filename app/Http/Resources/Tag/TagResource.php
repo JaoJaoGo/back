@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class TagListResource
+ * Class TagResource
  *
  * Resource responsável pela transformação
- * da entidade Post para o contexto de LISTAGEM.
+ * da entidade Tag para o contexto de LISTAGEM.
  *
  * Retorna apenas os dados necessários
  * para exibição em listas, evitando
@@ -17,7 +17,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @package App\Http\Resources\Tag
  */
-class TagListResource extends JsonResource
+class TagResource extends JsonResource
 {
     /**
      * Transforma o resource em array.

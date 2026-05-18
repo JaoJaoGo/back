@@ -32,13 +32,10 @@ class TagRepository
             ->when(
                 $filters['search'] ?? null,
                 fn ($q, $search) =>
-                    $q->where(function ($subQuery) use ($search) {
-                        $subQuery
-                            ->where('title', 'like', "%{$search}%")
-                            ->orWhere('subtitle', 'like', "%{$search}%");
-                    })
+                    $q->where('name', 'like', "%{$search}%")
             )
             ->orderBy(
+                $filters['sort'] ?? 'id',
                 $filters['direction'] ?? 'desc'
             )
             ->paginate($filters['per_page'] ?? 10);

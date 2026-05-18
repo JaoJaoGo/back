@@ -1,52 +1,55 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 // Controllers
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Post\PostController;
-use App\Http\Controllers\Post\TagController;
+use App\Http\Controllers\Tag\TagController;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 
 /*
-|--------------------------------------------------------------------------
-| Rotas de Autenticação
-|--------------------------------------------------------------------------
-|
-| Este arquivo define os endpoints responsáveis pelo fluxo
-| de autenticação da API.
-|
-| As rotas públicas permitem o login do usuário.
-| As rotas protegidas exigem autenticação via Sanctum.
-|
-*/
-
-/**
- * Realiza o login do usuário.
- *
- * Endpoint público responsável por autenticar o usuário
- * com e-mail e senha.
- *
- * Retorna:
- * - Dados do usuário autenticado
+ * |--------------------------------------------------------------------------
+ * | Rotas de Autenticação
+ * |--------------------------------------------------------------------------
+ * |
+ * | Este arquivo define os endpoints responsáveis pelo fluxo
+ * | de autenticação da API.
+ * |
+ * | As rotas públicas permitem o login do usuário.
+ * | As rotas protegidas exigem autenticação via Sanctum.
+ * |
  */
-Route::post('login', [AuthController::class, 'login']);
 
-/**
- * Registra um novo usuário no sistema.
- *
- * Endpoint público responsável por criar uma nova conta
- * de usuário com os dados básicos necessários.
- *
- * Retorna:
- * - Mensagem de sucesso
- * - Dados do usuário criado
- */
-Route::post('register', [UserController::class, 'store']);
+Route::middleware('web')->group(function () {
+    /**
+     * Realiza o login do usuário.
+     *
+     * Endpoint público responsável por autenticar o usuário
+     * com e-mail e senha.
+     *
+     * Retorna:
+     * - Dados do usuário autenticado
+     */
+    Route::post('login', [AuthController::class, 'login']);
+
+    /**
+     * Registra um novo usuário no sistema.
+     *
+     * Endpoint público responsável por criar uma nova conta
+     * de usuário com os dados básicos necessários.
+     *
+     * Retorna:
+     * - Mensagem de sucesso
+     * - Dados do usuário criado
+     */
+    Route::post('register', [UserController::class, 'store']);
+});
 
 /**
  * Rotas de Post
- * 
+ *
  * Rotas públicas que permitem o acesso aos posts
  * sem necessidade de autenticação.
  */
@@ -58,7 +61,7 @@ Route::prefix('posts')->group(function () {
 
 /**
  * Rotas de Tag
- * 
+ *
  * Rotas públicas que permitem o acesso às tags
  * sem necessidade de autenticação.
  */
@@ -69,16 +72,16 @@ Route::prefix('tags')->group(function () {
 });
 
 /*
-|--------------------------------------------------------------------------
-| Rotas Protegidas (auth:sanctum)
-|--------------------------------------------------------------------------
-|
-| As rotas abaixo exigem que o usuário esteja autenticado
-| via Laravel Sanctum.
-|
-*/
-Route::middleware('web', 'auth:sanctum')->group(function () {
-     /**
+ * |--------------------------------------------------------------------------
+ * | Rotas Protegidas (auth:sanctum)
+ * |--------------------------------------------------------------------------
+ * |
+ * | As rotas abaixo exigem que o usuário esteja autenticado
+ * | via Laravel Sanctum.
+ * |
+ */
+Route::middleware('auth:sanctum')->group(function () {
+    /**
      * Retorna os dados do usuário autenticado.
      *
      * Utiliza a sessão autenticada via cookies (Sanctum SPA)
@@ -96,7 +99,7 @@ Route::middleware('web', 'auth:sanctum')->group(function () {
 
     /**
      * Rotas de Post
-     * 
+     *
      * Rotas protegidas que permitem o gerenciamento de posts
      * pelo usuário autenticado.
      */
@@ -105,10 +108,10 @@ Route::middleware('web', 'auth:sanctum')->group(function () {
         Route::put('/{id}', [PostController::class, 'update'])->whereNumber('id');
         Route::delete('/{id}', [PostController::class, 'destroy'])->whereNumber('id');
     });
-    
+
     /**
      * Rotas de Tag
-     * 
+     *
      * Rotas protegidas que permitem o gerenciamento de tags
      * pelo usuário autenticado.
      */

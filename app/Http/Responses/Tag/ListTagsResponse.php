@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses\Tag;
 
-use App\Http\Resources\Tag\TagListResource;
+use App\Http\Resources\Tag\TagResource;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 
@@ -32,7 +32,7 @@ class ListTagsResponse
     public static function fromPaginator(LengthAwarePaginator $paginator): JsonResponse
     {
         return response()->json([
-            'data' => TagListResource::collection($paginator),
+            'data' => TagResource::collection($paginator),
             'meta' => [
                 'currentPage' => $paginator->currentPage(),
                 'perPage' => $paginator->perPage(),
